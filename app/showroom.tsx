@@ -17,6 +17,8 @@ const FIGMA_EMBED_SRC =
   "&hide-ui=1" +
   "&embed-host=cosmos-showroom";
 
+const LOADER_MIN_MS = 4000;
+
 function FullscreenIcon({ exit }: { exit?: boolean }) {
   const props = {
     width: 16,
@@ -52,18 +54,37 @@ function FullscreenIcon({ exit }: { exit?: boolean }) {
   );
 }
 
+function EmbedLoader() {
+  return (
+    <div
+      className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-3 bg-white"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading prototype"
+    >
+      <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-slate-200 border-t-[#4a4ae1]" />
+      <p className="text-sm font-medium text-slate-500">Loading showroom…</p>
+    </div>
+  );
+}
+
 export function Showroom() {
   const embedRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isEmbedLoading, setIsEmbedLoading] = useState(true);
 
   useEffect(() => {
+    const loaderTimer = setTimeout(() => setIsEmbedLoading(false), LOADER_MIN_MS);
+
     const onFullscreenChange = () => {
       setIsFullscreen(document.fullscreenElement === embedRef.current);
     };
 
     document.addEventListener("fullscreenchange", onFullscreenChange);
-    return () =>
+    return () => {
+      clearTimeout(loaderTimer);
       document.removeEventListener("fullscreenchange", onFullscreenChange);
+    };
   }, []);
 
   const toggleFullscreen = useCallback(async () => {
@@ -123,11 +144,13 @@ export function Showroom() {
         ref={embedRef}
         className="relative h-[calc(100dvh-3.5rem)] w-full overflow-hidden bg-white [&:fullscreen]:h-dvh [&:fullscreen]:w-screen"
       >
+        {isEmbedLoading ? <EmbedLoader /> : null}
+
         <iframe
           key={FIGMA_EMBED_SRC}
           src={FIGMA_EMBED_SRC}
           title="AI Factory Figma Presentation"
-          className="h-full w-full border-0 bg-white"
+          className={`h-full w-full border-0 bg-white transition-opacity duration-300 ${isEmbedLoading ? "opacity-0" : "opacity-100"}`}
           allowFullScreen
         />
 
