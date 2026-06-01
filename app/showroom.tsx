@@ -120,20 +120,15 @@ export function Showroom() {
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="hidden items-center gap-2 text-xs font-medium text-slate-500 sm:flex">
-            <span className="h-2 w-2 rounded-full bg-[#4a4ae1]" />
-            <span>Kliknij punkt, aby poznac szczegoly</span>
-          </div>
-
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="inline-flex items-center gap-1.5 rounded-md border border-[#4a4ae1] bg-[#4a4ae1] px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#3a3ac9] hover:bg-[#3a3ac9]"
+            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-md border border-[#4a4ae1] bg-[#4a4ae1] px-2.5 py-1.5 font-medium text-white transition-colors hover:border-[#3a3ac9] hover:bg-[#3a3ac9]"
             aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
             title={isFullscreen ? "Exit full screen" : "Full screen"}
           >
             <FullscreenIcon exit={isFullscreen} />
-            <span className="hidden sm:inline">
+            <span className="hidden text-base sm:inline">
               {isFullscreen ? "Exit" : "Full screen"}
             </span>
           </button>
