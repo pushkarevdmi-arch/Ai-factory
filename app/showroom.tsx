@@ -5,10 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const FIGMA_EMBED_SRC =
   "https://embed.figma.com/proto/h17yP6Ig70kLq03uCcOX5T/AI-Factory" +
-  "?node-id=159-382" +
-  "&starting-point-node-id=159%3A382" +
+  "?node-id=558-875" +
+  "&starting-point-node-id=558%3A875" +
   "&page-id=0%3A1" +
-  "&scaling=scale-down-width" +
+  "&scaling=contain" +
   "&content-scaling=fixed" +
   "&device-frame=false" +
   "&footer=false" +
@@ -17,7 +17,7 @@ const FIGMA_EMBED_SRC =
   "&hide-ui=1" +
   "&embed-host=cosmos-showroom";
 
-const LOADER_MIN_MS = 4000;
+const LOADER_MIN_MS = 5000;
 
 function FullscreenIcon({ exit }: { exit?: boolean }) {
   const props = {
