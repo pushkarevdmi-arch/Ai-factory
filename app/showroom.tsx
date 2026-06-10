@@ -174,7 +174,6 @@ export function Showroom() {
               className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-md bg-[#4a4ae1] px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors hover:bg-[#3a3ac9]"
               aria-label="Exit full screen"
             >
-              <FullscreenIcon exit />
               Exit full screen
             </button>
           ) : null}
