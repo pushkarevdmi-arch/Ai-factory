@@ -8,7 +8,7 @@ const FIGMA_EMBED_SRC =
   "?node-id=558-875" +
   "&starting-point-node-id=558%3A875" +
   "&page-id=0%3A1" +
-  "&scaling=contain" +
+  "&scaling=scale-down-width" +
   "&content-scaling=fixed" +
   "&device-frame=false" +
   "&footer=false" +
@@ -18,6 +18,10 @@ const FIGMA_EMBED_SRC =
   "&embed-host=cosmos-showroom";
 
 const LOADER_MIN_MS = 5000;
+
+// Match the Figma starting frame so fullscreen letterboxing aligns with the embed.
+const FIGMA_FRAME_WIDTH = 1920;
+const FIGMA_FRAME_HEIGHT = 1080;
 
 function FullscreenIcon({ exit }: { exit?: boolean }) {
   const props = {
@@ -137,29 +141,44 @@ export function Showroom() {
 
       <div
         ref={embedRef}
-        className="relative h-[calc(100dvh-3.5rem)] w-full overflow-hidden bg-white [&:fullscreen]:h-dvh [&:fullscreen]:w-screen"
+        className="relative h-[calc(100dvh-3.5rem)] w-full overflow-hidden bg-white [&:fullscreen]:flex [&:fullscreen]:h-dvh [&:fullscreen]:w-screen [&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:bg-black"
       >
         {isEmbedLoading ? <EmbedLoader /> : null}
 
-        <iframe
-          key={FIGMA_EMBED_SRC}
-          src={FIGMA_EMBED_SRC}
-          title="AI Factory Figma Presentation"
-          className={`h-full w-full border-0 bg-white transition-opacity duration-300 ${isEmbedLoading ? "opacity-0" : "opacity-100"}`}
-          allowFullScreen
-        />
+        <div
+          className={
+            isFullscreen
+              ? "relative h-auto max-h-full w-full"
+              : "relative h-full w-full"
+          }
+          style={
+            isFullscreen
+              ? {
+                  aspectRatio: `${FIGMA_FRAME_WIDTH} / ${FIGMA_FRAME_HEIGHT}`,
+                }
+              : undefined
+          }
+        >
+          <iframe
+            key={FIGMA_EMBED_SRC}
+            src={FIGMA_EMBED_SRC}
+            title="AI Factory Figma Presentation"
+            className={`h-full w-full border-0 bg-black transition-opacity duration-300 ${isEmbedLoading ? "opacity-0" : "opacity-100"}`}
+            allowFullScreen
+          />
 
-        {isFullscreen ? (
-          <button
-            type="button"
-            onClick={toggleFullscreen}
-            className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-md bg-[#4a4ae1] px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors hover:bg-[#3a3ac9]"
-            aria-label="Exit full screen"
-          >
-            <FullscreenIcon exit />
-            Exit full screen
-          </button>
-        ) : null}
+          {isFullscreen ? (
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-md bg-[#4a4ae1] px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors hover:bg-[#3a3ac9]"
+              aria-label="Exit full screen"
+            >
+              <FullscreenIcon exit />
+              Exit full screen
+            </button>
+          ) : null}
+        </div>
       </div>
     </main>
   );
